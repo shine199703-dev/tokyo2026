@@ -1,5 +1,3 @@
-
-
 <!doctype html>
 <html lang="zh-Hant">
 <head>
@@ -117,9 +115,25 @@ section:first-child{margin-top:0}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}
 .tag{border:2.5px solid var(--ink);border-radius:999px;padding:0 10px;font-size:12px;line-height:1.55}
 .t-plane{background:var(--aqua)} .t-jr{background:var(--green)} .t-train{background:var(--coral)}
-.t-exp{background:var(--yellow)} .t-walk{background:var(--paper)}
+.t-exp{background:var(--yellow)} .t-car{background:var(--yellow)} .t-bus{background:var(--aqua)} .t-walk{background:var(--paper)}
 .t-book{background:var(--paper);border-style:dashed}
 .maplink{margin-left:auto;font-size:12px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+
+
+.go{margin-top:10px;padding-top:8px;border-top:2.5px dashed var(--ink);display:grid;gap:6px}
+.go-h{font-size:12px;color:var(--muted)}
+.gr{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.5}
+.gc{flex:none;border:2.5px solid var(--ink);border-radius:999px;padding:0 9px;font-size:11.5px;line-height:1.5;margin-top:1px;min-width:46px;text-align:center}
+.g-m{background:var(--aqua)} .g-jr{background:var(--green)} .g-w{background:var(--paper)} .g-x{background:var(--yellow);border-style:dashed}
+.tt{margin-top:10px;padding-top:8px;border-top:2.5px dashed var(--ink)}
+.tt table{width:100%;border-collapse:separate;border-spacing:0;margin-top:6px;font-size:13px;border:2.5px solid var(--ink);border-radius:14px;overflow:hidden}
+.tt th{background:var(--yellow);font-weight:400;padding:3px 6px;text-align:left;font-size:12px;border-bottom:2.5px solid var(--ink)}
+.tt td{padding:5px 6px;font-variant-numeric:tabular-nums}
+.tt tr+tr td{border-top:2px dashed var(--ink)}
+.tt b{font-weight:400;font-size:15px}
+.lk{display:inline-block;border:2.5px solid var(--ink);border-radius:999px;background:var(--yellow);padding:0 12px;font-size:12.5px;line-height:1.6;text-decoration:none;margin:2px 6px 2px 0}
+.lks{margin-top:2px}
+.route-note{font-size:12.5px;color:var(--muted);margin:-8px 0 16px;line-height:1.5}
 
 /* ---------- checklists ---------- */
 .prog{display:flex;align-items:center;gap:10px;margin-bottom:12px}
@@ -532,85 +546,94 @@ footer svg{display:block;margin:0 auto 6px}
 
   /* ---------- data ---------- */
   var C=['var(--coral)','var(--yellow)','var(--aqua)','var(--green)'];
-  var JR=['jr','JR 總武線'], WALK=['walk','步行'], TR=['train','電車'], PL=['plane','飛機'], EX=['exp','快線'];
+  var JR=['jr','JR'], WALK=['walk','步行'], TR=['train','地鐵'], PL=['plane','飛機'], EX=['exp','快線'], CAR=['car','開車'], BUS=['bus','巴士'];
+  var TT_KIN='https://ekitan.com/timetable/railway/line-station/184-17/d1';
+  var TT_JR='https://timetables.jreast.co.jp/';
   var DAYS=[
     {n:1,date:'2026-11-27',md:'11/27',wd:'五',icon:'ic-train',color:'var(--aqua)',
-     title:'抵達東京・美術館與點燈',sub:'飛抵成田，轉乘 JR 入住錦糸町，夜晚看展與六本木點燈',
+     title:'抵達東京・上野看展與六本木夜',sub:'清晨飛抵成田，JR 入住錦糸町，傍晚上野看展，夜晚六本木吃肉',
      items:[
-      {t:'13:25',title:'抵達成田機場',note:'JX314 日本時間 13:25 抵達，第 2 航廈',tags:[PL],map:'成田國際機場 第2航廈'},
-      {t:'入境後',title:'搭 JR 總武線前往飯店',note:'成田機場 → 錦糸町',tags:[JR],map:'錦糸町駅'},
-      {t:'16:00',title:'抵達飯店・辦理入住',note:'相鐵錦糸町',tags:[WALK],map:'相鐵錦糸町'},
-      {t:'17:00–19:00',title:'東京美術館',note:'看展時間，記得確認展覽與閉館時間',tags:[TR]},
-      {t:'20:00',title:'六本木點燈',note:'冬季夜晚的燈飾散步',tags:[TR],must:true,map:'六本木 點燈'},
-      {t:'21:00',title:'肉男',note:'晚餐',tags:[TR],book:true,map:'肉男'},
-      {t:'23:00',title:'回飯店休息',note:'',tags:[TR]}
+      {t:'06:00',title:'起床',note:'6:30 準備出發',tags:[]},
+      {t:'06:30',title:'開車前往臺中國際機場',note:'車程約 35 分鐘・周邊停車場單日最高 170 元',tags:[CAR],map:'臺中國際機場'},
+      {t:'07:00',title:'Check in 寄行李・過海關',note:'吃暈機藥 💊',tags:[PL],map:'臺中國際機場'},
+      {t:'09:15',title:'JX314 起飛前往成田',note:'RMQ 09:15 → NRT 13:25（日本時間）',tags:[PL]},
+      {t:'14:00',title:'入境後到 B1 搭 JR 總武線快速',go:[["jr","成田機場第2・3航廈站（B1）→ JR 總武線快速 → 錦糸町，約 1 小時 20 分"],["x","入境若順利可搭 14:01，來不及就搭 15:02／16:01。下表為 NAVITIME 截圖，截圖只到 17:01，之後的班次請點下方連結查詢"]],note:'抵達後依入境速度搭車',tt:{h:'成田機場 → 錦糸町（JR 成田線快速）',c:['出發','抵達','車程','開往'],r:[['14:01','15:23','1h22','逗子'],['15:02','16:21','1h19','逗子'],['16:01','17:17','1h16','逗子'],['17:01','18:17','1h16','久里濱']]},tags:[JR],map:'成田空港 第2ターミナル駅',links:[["JR 東日本時刻表","https://timetables.jreast.co.jp/"],["Yahoo 路線資訊（錦糸町）","https://transit.yahoo.co.jp/station/top/22640"]]},
+      {t:'16:00',title:'抵達飯店・辦理入住',go:[["w","錦糸町站步行前往飯店"]],note:'相鐵錦糸町',tags:[WALK],map:'相鐵錦糸町'},
+      {t:'17:00–19:00',title:'東京都美術館',go:[["jr","錦糸町 → JR 中央總武線（各站停車）→ 秋葉原 → 轉 JR 山手線 → 上野，約 15 分"],["w","從 JR 上野站「公園口」步行約 7 分"]],note:'開館 100 週年紀念「オルセー美術館所蔵 いまを生きる歓び」・票價 ¥2,400・週五開到 20:00',tags:[JR,WALK],map:'東京都美術館'},
+      {t:'19:30',title:'出發前往六本木',go:[["m","上野 → 日比谷線 → 六本木，約 26 分"],["w","六本木站 1C 出口"]],note:'',tags:[TR],map:'六本木駅'},
+      {t:'20:00',title:'六本木點燈',note:'冬季夜晚的燈飾散步',tags:[WALK],must:true,map:'六本木 點燈'},
+      {t:'21:00',title:'MEAT MAN Roppongi（ミートマン 六本木店）',note:'晚餐',tags:[WALK],book:true,map:'ミートマン 六本木店'},
+      {t:'23:00',title:'回飯店休息',go:[["m","六本木 → 都營大江戶線 → 青山一丁目 → 轉半藏門線 → 錦糸町，約 32 分"]],note:'',tags:[TR]}
      ]},
     {n:2,date:'2026-11-28',md:'11/28',wd:'六',icon:'ic-leaf',color:'var(--yellow)',
-     title:'銀杏巡禮・澀谷原宿',sub:'兩處銀杏、咖啡店、澀谷與原宿，晚上抽水煙',
+     title:'銀杏巡禮・澀谷原宿',sub:'兩處銀杏、拉麵與咖啡、原宿表參道逛街，晚上抽水煙',
      items:[
-      {t:'09:00',title:'nadoya no katte 咖啡店',note:'早晨咖啡',tags:[TR],map:'nadoya no katte'},
-      {t:'11:00',title:'東京大學 駒場校區',note:'拍銀杏',tags:[TR],must:true,map:'東京大學 駒場キャンパス'},
-      {t:'12:00',title:'澀谷吃午餐',note:'',tags:[TR]},
-      {t:'13:30',title:'Fuglen Tokyo 咖啡廳',note:'',tags:[WALK],map:'Fuglen Tokyo'},
-      {t:'14:30',title:'明治神宮',note:'拍銀杏',tags:[WALK],must:true,map:'明治神宮'},
-      {t:'16:30',title:'原宿逛街',note:'',tags:[WALK]},
-      {t:'19:00',title:'晚餐',note:'地點待定',tags:[TR]},
-      {t:'20:30',title:'抽水煙',note:'',tags:[WALK]}
+      {t:'09:00',title:'nadoya no katte 咖啡店',go:[["m","錦糸町 → 半藏門線 → 表參道 → 轉千代田線 → 代代木上原，約 38 分"],["w","代代木上原站步行約 3 分"]],note:'早晨咖啡',tags:[TR],map:'nadoya no katte'},
+      {t:'11:00',title:'東京大學 駒場校區',go:[["m","代代木上原 → 小田急小田原線（急行）→ 下北澤 → 轉京王井之頭線 → 駒場東大前，約 15 分"]],note:'拍銀杏',tags:[TR],must:true,map:'東京大學 駒場キャンパス'},
+      {t:'12:30',title:'澀谷午餐・らーめん はやし（Hayashi）',go:[["m","駒場東大前 → 京王井之頭線 → 澀谷，約 3 分"],["w","JR「澀谷」站西口步行約 5 分"]],note:'營業 11:30–15:30・週三與週日公休（11/28 週六有開）',tags:[TR],map:'らーめん はやし 渋谷'},
+      {t:'13:30',title:'Fuglen Tokyo 咖啡廳',go:[["w","從拉麵店步行約 20 分"]],note:'',tags:[WALK],map:'Fuglen Tokyo'},
+      {t:'14:30',title:'明治神宮',go:[["w","從 Fuglen 步行約 24 分"]],note:'拍銀杏',tags:[WALK],must:true,map:'明治神宮'},
+      {t:'16:30',title:'原宿・表參道逛街',go:[["w","明治神宮出來步行前往原宿／表參道"]],note:'要逛：agete、HushTug、Onitsuka Tiger、寶可夢',tags:[WALK],map:'原宿 表参道'},
+      {t:'19:00',title:'原宿或表參道晚餐',go:[["w","逛街結束後就近步行前往"]],note:'推薦：Satsumaya Tonton 原宿（豬排・涮涮鍋，約 ¥4,000–4,999）、ハンバーグ 嘉（炭烤漢堡排）、bills 表參道（澳式全日餐廳）。營業時間與訂位請先確認',tags:[WALK],links:[["原宿・表參道美食（Tabelog）","https://tabelog.com/tw/tokyo/A1306/"]]},
+      {t:'20:30',title:'抽水煙',go:[["jr","Polysection 在澀谷：原宿 → JR 山手線 → 澀谷（1 站）"],["x","Shisha Cafe SWAY 店址待確認，兩間擇一，出發前確認營業時間"]],note:'Polysection 渋谷シーシャ喫茶，或 Shisha Cafe SWAY',tags:[JR],map:'Polysection 渋谷シーシャ喫茶'}
      ]},
     {n:3,date:'2026-11-29',md:'11/29',wd:'日',icon:'ic-orbs',color:'var(--coral)',
-     title:'teamLab・銀座・新宿夜',sub:'光影展、銀座拉麵與酒吧，晚上轉往新宿',
+     title:'銀座・teamLab・新宿夜',sub:'銀座咖啡與壽喜燒、teamLab Planets、新宿夜飲與抽水煙',
      items:[
-      {t:'09:00',title:'起床・Lawson 早餐',note:'',tags:[WALK]},
-      {t:'11:00',title:'teamLab',note:'確認場館與入場時段',tags:[TR],must:true,map:'teamLab'},
-      {t:'15:30',title:'銀座 八五拉麵店',note:'午晚餐',tags:[TR],book:true,map:'銀座 八五拉麵'},
-      {t:'16:30',title:'銀座附近晃晃・咖啡廳',note:'',tags:[WALK]},
-      {t:'17:00',title:'Tender Bar',note:'',tags:[WALK],map:'Tender Bar 銀座'},
-      {t:'20:00',title:'日本酒原價酒藏 新宿總本店',note:'',tags:[TR],map:'日本酒原價酒藏 新宿總本店'},
-      {t:'22:00',title:'新宿抽水煙',note:'',tags:[WALK]}
+      {t:'09:30',title:'Glitch Coffee and Roasters GINZA',go:[["jr","錦糸町 → JR 中央總武線（各站停車）→ 淺草橋 → 轉都營淺草線特急 → 東銀座，約 17 分"],["w","東銀座站 5 號出口"]],note:'銀座咖啡廳',tags:[JR,TR],map:'Glitch Coffee and Roasters GINZA'},
+      {t:'11:00',title:'銀座・山笑壽喜燒',go:[["w","步行約 7 分"]],note:'午餐',tags:[WALK],map:'山笑 銀座 すき焼き'},
+      {t:'14:30',title:'teamLab Planets TOKYO',go:[["w","東銀座 5 號出口，到築地站搭都營巴士"],["m","都營巴士［都05-2］往新豐洲站，約 20 分"]],note:'展區需脫鞋涉水，建議穿好捲的褲子',tags:[BUS],must:true,map:'teamLab Planets TOKYO'},
+      {t:'16:30',title:'回銀座',go:[["m","搭都營巴士［都05-2］回銀座四丁目"]],note:'',tags:[BUS]},
+      {t:'17:00',title:'Tender Bar',go:[["w","從銀座四丁目附近步行前往（店址以訂位資料為準）"]],note:'',tags:[WALK],map:'Tender Bar 銀座'},
+      {t:'20:00',title:'日本酒原價酒藏 新宿總本店',go:[["m","銀座 → 東京 Metro 丸之內線 → 新宿站（不需轉乘）"],["w","酒藏在西新宿，離新宿西口站（大江戶線）約 1 分、新宿站（丸之內線）約 5 分"]],note:'',tags:[TR],map:'日本酒原価酒蔵 新宿総本店'},
+      {t:'22:00',title:'RELUX Shisha & Cocktail Bar',go:[["w","從酒藏步行約 7 分"]],note:'新宿抽水煙',tags:[WALK],map:'RELUX Shisha & Cocktail Bar 新宿'}
      ]},
     {n:4,date:'2026-11-30',md:'11/30',wd:'一',icon:'ic-picnic',color:'var(--green)',
-     title:'芝公園野餐・採買日',sub:'處理遺失物、銀座買麵包咖啡，到芝公園野餐',
+     title:'芝公園野餐・赤坂・遺失物',sub:'芝公園野餐、赤坂抽水煙，下午到飯田橋處理遺失物',
      items:[
-      {t:'08:30',title:'去找遺失物',note:'記得帶證件與相關資料',tags:[TR]},
-      {t:'09:00',title:'銀座買咖啡・麵包',note:'野餐的食物',tags:[TR]},
-      {t:'10:00',title:'芝公園野餐',note:'帶野餐墊，一邊看東京鐵塔',tags:[TR],must:true,map:'芝公園'},
-      {t:'12:00',title:'原宿逛街',note:'',tags:[TR]},
-      {t:'14:00',title:'抽水煙',note:'',tags:[WALK]},
-      {t:'17:30',title:'無人餐廳',note:'晚餐',tags:[TR]},
-      {t:'19:00',title:'飯店附近買藥妝與 Uniqlo',note:'最後採買',tags:[TR]}
+      {t:'10:00',title:'芝公園野餐',go:[["m","錦糸町 → 東京 Metro 半藏門線 → 大手町 → 轉都營三田線 → 芝公園，約 27 分"]],note:'帶野餐墊，一邊看東京鐵塔',tags:[TR],must:true,map:'芝公園'},
+      {t:'13:00',title:'赤坂シーシャ LA NATURE（ラ・ナチュール）',go:[["m","芝公園 → 都營三田線 → 大手町 → 轉東京 Metro 千代田線 → 赤坂，約 21 分"],["w","赤坂站 1 號出口"]],note:'抽水煙',tags:[TR],map:'赤坂シーシャ LA NATURE'},
+      {t:'15:30',title:'警視廳 遺失物中心',go:[["m","赤坂 → 千代田線 → 國會議事堂前 → 步行到溜池山王站 → 東京 Metro 南北線 → 飯田橋，約 20 分"]],note:'週一，記得帶護照與遺失物資料，出發前確認受理時間',tags:[TR],map:'警視庁 遺失物センター'},
+      {t:'17:00',title:'無人餐廳',go:[["w","從警視廳步行約 13 分"]],note:'晚餐',tags:[WALK]},
+      {t:'19:00',title:'回飯店附近買藥妝與 Uniqlo',go:[["jr","飯田橋 → JR 中央總武線（各站停車）→ 錦糸町，約 15 分"]],note:'最後採買',tags:[JR]}
      ]},
     {n:5,date:'2026-12-01',md:'12/1',wd:'二',icon:'ic-onigiri',color:'var(--coral)',
-     title:'飯糰早餐・返家',sub:'小網神社參拜後取行李，搭快線前往成田',
+     title:'小網神社・飯糰・返家',sub:'參拜小網神社、飯糰早餐，取行李搭 JR 前往成田',
      items:[
-      {t:'08:00',title:'Shichiroka Onigiri Shop 飯糰店',note:'早餐',tags:[TR],map:'Shichiroka Onigiri Shop'},
-      {t:'09:00',title:'小網神社',note:'',tags:[WALK],map:'小網神社'},
-      {t:'10:00',title:'返回飯店拿行李',note:'前往機場',tags:[TR],map:'相鐵錦糸町'},
-      {t:'11:00',title:'搭快線前往機場',note:'成田機場第 2 航廈',tags:[EX],map:'成田國際機場 第2航廈'},
+      {t:'08:00',title:'小網神社',go:[["m","錦糸町 → 東京 Metro 半藏門線 → 水天宮前，約 10 分"],["w","水天宮前站步行約 6 分"]],note:'',tags:[TR],map:'小網神社'},
+      {t:'09:00',title:'Shichiroka Onigiri Shop 飯糰店',go:[["w","從小網神社步行約 6 分"]],note:'早餐',tags:[WALK],map:'おにぎり屋 シチロカ'},
+      {t:'10:00',title:'返回飯店拿行李',go:[["w","走到水天宮前站"],["m","東京 Metro 半藏門線 → 錦糸町，約 20 分"]],note:'前往機場',tags:[TR],map:'相鐵錦糸町'},
+      {t:'11:24',title:'搭 JR 總武快速前往機場',go:[["jr","錦糸町 → JR 總武快速 → 成田機場第2・3航廈站"],["x","10:24 班次要在 10:00 到飯店後馬上拿行李，會很趕，建議搭 11:24（12:41 抵達，距離 14:25 起飛約 1 小時 44 分）。下表為 NAVITIME 截圖"]],note:'JX315 14:25 起飛，建議提早抵達機場',tt:{h:'錦糸町 → 成田機場（JR 總武線快速）',c:['出發','抵達','車程','開往'],r:[['10:24','11:40','1h16','成田機場'],['11:24','12:41','1h17','成田機場'],['12:24','13:40','1h16','成田機場']]},tags:[EX],map:'成田國際機場 第2航廈',links:[["錦糸町時刻表（Ekitan）",TT_KIN],["JR 東日本時刻表",TT_JR]]},
       {t:'14:25',title:'JX315 起飛返回臺中',note:'17:55 抵達臺中國際機場',tags:[PL]}
      ]}
   ];
 
   var LISTS={
     todo:[{g:null,items:[
-      {t:'確認肉男訂位',s:'Day 1・21:00',d:'Day1'},
-      {t:'確認銀座八五拉麵店訂位',s:'Day 3・15:30',d:'Day3'},
-      {t:'確認 teamLab 門票與入場時段',s:'Day 3・11:00',d:'Day3'},
-      {t:'查東京美術館展覽與營業時間',s:'Day 1・17:00–19:00',d:'Day1'},
-      {t:'查六本木點燈時間與集合地點',s:'Day 1・20:00',d:'Day1'},
-      {t:'決定 Day 2 晚餐餐廳',s:'19:00',d:'Day2'},
-      {t:'查無人餐廳是否需預約',s:'Day 4・17:30',d:'Day4'},
-      {t:'整理遺失物聯絡窗口與資料',s:'Day 4・08:30',d:'Day4'}
+      {t:'預約 MEAT MAN 六本木店',s:'Day 1・21:00',d:'Day1'},
+      {t:'確認東京都美術館展覽是否需預約入場、購票',s:'¥2,400・週五開到 20:00',d:'Day1'},
+      {t:'查 JR 總武快速時刻表',s:'11/27 成田第2・3航廈 → 錦糸町（14:00–18:00）',d:'Day1'},
+      {t:'確認らーめん はやし 營業時間',s:'週三、週日公休・11:30–15:30',d:'Day2'},
+      {t:'決定 Day 2 晚餐餐廳並確認訂位',s:'原宿或表參道・19:00',d:'Day2'},
+      {t:'確認抽水煙店家（Polysection 或 SWAY）營業時間',s:'20:30',d:'Day2'},
+      {t:'確認山笑壽喜燒營業時間與訂位',s:'11:00',d:'Day3'},
+      {t:'購買 teamLab Planets 門票並選入場時段',s:'14:30',d:'Day3'},
+      {t:'確認 Tender Bar 店址與營業時間',s:'17:00',d:'Day3'},
+      {t:'確認 RELUX 與赤坂 LA NATURE 營業時間',s:'Day 3 22:00・Day 4 13:00',d:'Day3'},
+      {t:'確認警視廳遺失物中心受理時間與所需資料',s:'Day 4・15:30',d:'Day4'},
+      {t:'決定無人餐廳店名並確認是否需預約',s:'Day 4・17:00',d:'Day4'},
+      {t:'查 JR 總武快速時刻表',s:'12/1 錦糸町 → 成田第2・3航廈（10:00–11:00）',d:'Day5'}
     ]}],
     prep:[
       {g:'證件與手續',c:'var(--coral)',items:[{t:'護照效期確認'},{t:'Visit Japan Web 填寫'},{t:'機票與訂位代號截圖',s:'589JSE'},{t:'住宿確認信截圖'}]},
       {g:'錢與通訊',c:'var(--yellow)',items:[{t:'換日幣現金'},{t:'確認信用卡可海外使用'},{t:'網卡 / eSIM 設定好'},{t:'下載離線地圖與翻譯'}]},
-      {g:'安全與安排',c:'var(--aqua)',items:[{t:'旅平險 / 旅遊不便險'},{t:'線上 check-in',s:'星宇航空'},{t:'前一晚確認行李與天氣預報'},{t:'行動電源放隨身行李'}]}
+      {g:'安全與安排',c:'var(--aqua)',items:[{t:'旅平險 / 旅遊不便險'},{t:'線上 check-in',s:'星宇航空'},{t:'確認機場周邊停車場',s:'單日最高 170 元'},{t:'前一晚確認行李與天氣預報'},{t:'行動電源放隨身行李'}]}
     ],
     pack:[
       {g:'證件與錢',c:'var(--coral)',items:[{t:'護照',s:'退稅也會用到'},{t:'日幣現金與零錢'},{t:'信用卡'}]},
       {g:'衣物',c:'var(--yellow)',items:[{t:'保暖外套 / 大衣'},{t:'薄長袖、針織衫（洋蔥式）'},{t:'圍巾或薄手套'},{t:'好走的鞋',s:'每天都在走路'},{t:'換洗衣物與睡衣'}]},
       {g:'3C',c:'var(--aqua)',items:[{t:'手機與充電線'},{t:'行動電源',s:'隨身攜帶，不可託運'},{t:'相機 / 記憶卡',s:'拍銀杏用'},{t:'耳機'}]},
-      {g:'盥洗與藥品',c:'var(--green)',items:[{t:'盥洗用品與保養品'},{t:'常備藥品'},{t:'隱形眼鏡 / 眼鏡'},{t:'口罩'}]},
+      {g:'盥洗與藥品',c:'var(--green)',items:[{t:'盥洗用品與保養品'},{t:'常備藥品'},{t:'暈機藥',s:'Day 1 check in 後服用'},{t:'隱形眼鏡 / 眼鏡'},{t:'口罩'}]},
       {g:'其他',c:'var(--coral)',items:[{t:'環保購物袋'},{t:'野餐墊',s:'Day 4 芝公園'},{t:'小包包',s:'逛街用'},{t:'摺疊傘'}]}
     ]
   };
@@ -627,12 +650,26 @@ footer svg{display:block;margin:0 auto 6px}
     var parts=it.t.split('–'), tm=parts.length>1?parts[0]+'<small>–'+parts[1]+'</small>':it.t;
     var tags=(it.tags||[]).map(function(t){return '<span class="tag t-'+t[0]+'">'+t[1]+'</span>'}).join('');
     var book=it.book?'<span class="tag t-book">需訂位</span>':'';
+    var go='';
+    if(it.go&&it.go.length){
+      var lab={m:'地鐵',jr:'JR',w:'步行',x:'待確認'};
+      go='<div class="go"><div class="go-h">從上一站怎麼去</div>'+it.go.map(function(g){return '<div class="gr"><span class="gc g-'+g[0]+'">'+lab[g[0]]+'</span><span>'+g[1]+'</span></div>'}).join('')+'</div>';
+    }
+    var tt='';
+    if(it.tt){
+      tt='<div class="tt"><div class="go-h">'+it.tt.h+'</div><table><thead><tr>'+it.tt.c.map(function(c){return '<th>'+c+'</th>'}).join('')+'</tr></thead><tbody>'+
+        it.tt.r.map(function(r){return '<tr><td><b>'+r[0]+'</b></td><td><b>'+r[1]+'</b></td><td>'+r[2]+'</td><td>'+r[3]+'</td></tr>'}).join('')+'</tbody></table></div>';
+    }
+    var lk='';
+    if(it.links&&it.links.length){
+      lk='<div class="lks">'+it.links.map(function(l){return '<a class="lk" target="_blank" rel="noopener" href="'+l[1]+'">'+l[0]+' ↗</a>'}).join('')+'</div>';
+    }
     var map=it.map?'<a class="maplink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(it.map)+'">地圖 ↗</a>':'';
     var dot=it.must?'var(--coral)':C[i%4];
     return '<li class="'+(it.must?'must':'')+'" style="--i:'+i+';--dot:'+dot+'"><time>'+tm+'</time>'+
       '<div class="ev">'+(it.must?'<span class="sticker">必去</span>':'')+
       '<h4>'+it.title+'</h4>'+(it.note?'<p>'+it.note+'</p>':'')+
-      '<div class="tags">'+tags+book+map+'</div></div></li>';
+      '<div class="tags">'+tags+book+map+'</div>'+go+tt+lk+'</div></li>';
   }
 
   function selectDay(i,animate){
@@ -649,7 +686,7 @@ footer svg{display:block;margin:0 auto 6px}
     viewEl.innerHTML=
       '<div class="card dayhead"><div class="dayicon" style="background:'+d.color+'"><svg width="46" height="46" viewBox="0 0 48 48"><use href="#'+d.icon+'"/></svg></div>'+
       '<div><div class="dh-top">Day '+d.n+'・'+d.md+'（'+d.wd+'）</div><h3>'+d.title+'</h3><p>'+d.sub+'</p></div></div>'+
-      '<ol class="timeline">'+d.items.map(itemHTML).join('')+'</ol>';
+      '<p class="route-note">站名與時間為事前整理的參考，出發前請用 Google 地圖或 NAVITIME 確認班次與末班車。標示「待確認」的是還缺店址或場館的地點。</p><ol class="timeline">'+d.items.map(itemHTML).join('')+'</ol>';
   }
   tabsEl.addEventListener('click',function(e){
     var b=e.target.closest('.tab'); if(!b) return;
